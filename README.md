@@ -1,5 +1,5 @@
 # milestone-2-BE
 
-- [x] #739
-- [ ] https://github.com/octo-org/octo-repo/issues/740
-- [ ] Add delight to the experience when all tasks are complete :tada:
+- [ ] Create models for trainer and teams
+- [ ] Create controllers for trainer and teams and PC
+- [ ] Create paths
