@@ -6,6 +6,9 @@ const teamSchema = new Schema(
         pokemon: {
             type: Array,
         },
+        name: {
+            type: String,
+        },
     },
     { toJSON: { virtuals: true } }
 );
