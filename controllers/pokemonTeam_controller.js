@@ -1,13 +1,15 @@
-const express = "express";
+const express = require("express");
 const router = express.Router();
-const Team = requiure("./models/pokemonTeam");
+const Team = require("../models/team");
+const randomId = Math.floor(Math.random() * 150) + 1;
+
+async function newPokemon(randomId) {
+    await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+}
 
 router.get("/", async (req, res) => {
-    const randomId = Math.floor(Math.random() * 150) + 1;
     try {
-        const newPokemon = await fetch(
-            `https://pokeapi.co/api/v2/pokemon/${randomId}`
-        ).then((foundPokemon) => {
+        newPokemon(randomId).then((foundPokemon) => {
             foundPokemon = newPokemon.json();
             res.status(200).json(foundPokemon);
         });
@@ -17,10 +19,20 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", (req, res) => {});
+router.get("/:id", async (req, res) => {
+    const pokemon = await Team.findById(req.params.id).then((foundPokemon) => {
+        res.send(foundPokemon.json());
+    });
+});
 
-router.post("/", (req, res) => {});
+router.post("/", (req, res) => {
+    Team.create(newPokemon());
+});
 
-router.put("/:id", (req, res) => {});
+router.delete("/:id", (req, res) => {
+    Team.findByIdAndDelete(req.params.id).then((deletedPokemon) => {
+        res.status(303);
+    });
+});
 
-router.delete("/:id", (req, res) => {});
+module.exports = router;
