@@ -13,7 +13,5 @@ const teamSchema = new Schema(
     { toJSON: { virtuals: true } }
 );
 
-teamSchema.post("findOneAndDelete", () => {});
-
 const Team = mongoose.model("Team", teamSchema);
 module.exports = Team;

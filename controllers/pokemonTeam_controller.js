@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const Team = require("../models/team");
 const randomId = Math.floor(Math.random() * 150) + 1;
-
-async function newPokemon(randomId) {
-    await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
-}
+const axios = require("axios");
+// const db = require(`../models/team.js`);
 
 router.get("/", async (req, res) => {
     try {
-        newPokemon(randomId).then((foundPokemon) => {
-            foundPokemon = newPokemon.json();
-            res.status(200).json(foundPokemon);
-        });
+        axios
+            .get(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
+            .then((foundPokemon) => {
+                res.status(200);
+                res.send(foundPokemon.data.name);
+            });
     } catch (error) {
         res.status(500).json(error);
         console.log(error);
@@ -20,13 +20,32 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-    const pokemon = await Team.findById(req.params.id).then((foundPokemon) => {
-        res.send(foundPokemon.json());
-    });
+    try {
+        axios
+            .get(`https://pokeapi.co/api/v2/pokemon/${req.params.id}`)
+            .then((foundPokemon) => {
+                res.status(200);
+                res.send(foundPokemon.data);
+            });
+    } catch (error) {
+        res.status(500).json();
+        console.log(error);
+    }
 });
 
-router.post("/", (req, res) => {
-    Team.create(newPokemon());
+router.post("/", async (req, res) => {
+    try {
+        const { pokemon, name } = req.body;
+        console.log(name);
+        const createdTeam = await new Team({
+            pokemon,
+            name,
+        });
+        res.send(createdTeam);
+    } catch (error) {
+        res.status(500).json(error);
+        console.log(error);
+    }
 });
 
 router.delete("/:id", (req, res) => {

@@ -13,4 +13,16 @@ app.listen(process.env.PORT, () => {
 // MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+    res.send("hello there");
+});
+
 app.use("/team", pokemonTeam);
+
+mongoose.connect(
+    process.env.MONGO_URI,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+        console.log("connected to " + process.env.MONGO_URI);
+    }
+);
