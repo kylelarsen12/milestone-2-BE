@@ -10,16 +10,21 @@ router.get("/", async (req, res) => {
     .get("https://pokeapi.co/api/v2/pokemon/ditto")
     .then((dataToPrint) => console.log(dataToPrint.data))
     .catch((err) => console.log(err));
-  StoredPokemon.create(resData);
 });
 
 router.post("/", async (req, res) => {
-  const resData = await axios
-    .get("https://pokeapi.co/api/v2/pokemon/ditto")
-    .then(console.log("blah"))
-    .catch((err) => console.log(err));
-  StoredPokemon.create(resData.name);
+  try {
+    const { data } = await axios.get("https://pokeapi.co/api/v2/pokemon/ditto");
+    console.log(data);
+    const createdPokemon = await new StoredPokemon(data).save();
+    console.log(createdPokemon);
+    res.json({ message: "pokemon added to storedpokemon db" });
+  } catch (error) {
+    res.status(400).json({ message: String(error) });
+  }
 });
+
+router.delete("/", async (req, res) => {});
 
 //Export
 module.exports = router;

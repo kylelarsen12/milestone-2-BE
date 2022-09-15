@@ -1,12 +1,7 @@
 //DEPENDENCIES
 const express = require("express");
 const mongoose = require("mongoose");
-const axios = require("axios");
 require("dotenv").config();
-mongoose.connect(process.env.MONGO_URI, {
-  useNewURLParser: true,
-  useUnifiedTopology: true,
-});
 //const pokedex = require("pokedex-promise-v2");
 
 const app = express();
@@ -16,5 +11,13 @@ app.use(express.json());
 
 //ROUTES
 app.use("/storedPokemon", require("./controllers/storedPokemon"));
+
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("DB connected"))
+  .catch((err) => console.error(err));
 
 app.listen(process.env.PORT || 5000);

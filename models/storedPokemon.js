@@ -5,8 +5,9 @@ const mongoose = require("mongoose");
 const storedPokemonSchema = new mongoose.Schema(
   {
     name: { type: String },
-    type: { type: String },
+    types: { type: Array },
     id: { type: Number },
+    sprites: { type: Array },
   },
   { toJSON: { virtuals: true } }
 );
