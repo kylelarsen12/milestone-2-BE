@@ -2,7 +2,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
-//const pokedex = require("pokedex-promise-v2");
+const pokemonTeam = require("./controllers/pokemonTeam_controller");
+const pokedex = require("pokedex-promise-v2");
 
 const app = express();
 
@@ -10,6 +11,7 @@ const app = express();
 app.use(express.json());
 
 //ROUTES
+app.use("/team", pokemonTeam);
 app.use("/storedPokemon", require("./controllers/storedPokemon"));
 
 mongoose
@@ -19,5 +21,6 @@ mongoose
   })
   .then(() => console.log("DB connected"))
   .catch((err) => console.error(err));
+
 
 app.listen(process.env.PORT || 5050);
