@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const pokemonTeam = require("./controllers/pokemonTeam_controller");
-const pokedex = require("pokedex-promise-v2");
+//const pokedex = require("pokedex-promise-v2");
 
 const app = express();
 
