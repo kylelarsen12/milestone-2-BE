@@ -3,6 +3,7 @@ const router = express.Router();
 const Team = require("../models/team");
 const randomId = Math.floor(Math.random() * 150) + 1;
 const axios = require("axios");
+const { default: mongoose } = require("mongoose");
 // const db = require(`../models/team.js`);
 
 router.get("/", async (req, res) => {
@@ -41,6 +42,7 @@ router.post("/", async (req, res) => {
             pokemon,
             name,
         });
+        await createdTeam.save();
         res.send(createdTeam);
     } catch (error) {
         res.status(500).json(error);
