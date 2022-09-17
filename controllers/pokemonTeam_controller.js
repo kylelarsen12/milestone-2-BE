@@ -3,8 +3,7 @@ const router = express.Router();
 const Team = require("../models/team");
 const randomId = Math.floor(Math.random() * 150) + 1;
 const axios = require("axios");
-const { default: mongoose } = require("mongoose");
-// const db = require(`../models/team.js`);
+const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
     try {
@@ -22,12 +21,9 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
-        axios
-            .get(`https://pokeapi.co/api/v2/pokemon/${req.params.id}`)
-            .then((foundPokemon) => {
-                res.status(200);
-                res.send(foundPokemon.data);
-            });
+        Team.findById(req.params.id).then((foundTeam) => {
+            res.send(foundTeam);
+        });
     } catch (error) {
         res.status(500).json();
         console.log(error);
@@ -36,18 +32,26 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const { pokemon, name } = req.body;
+        const name = req.body.name;
+        const pokemon = req.body.pokemon;
         console.log(name);
         const createdTeam = await new Team({
             pokemon,
             name,
-        });
-        await createdTeam.save();
-        res.send(createdTeam);
+        }).save();
+        // Team.create(createdTeam);
     } catch (error) {
         res.status(500).json(error);
         console.log(error);
     }
+});
+
+router.put("/:id", (req, res) => {
+    Team.findByIdAndUpdate(req.params.id, req.body, { new: true }).then(
+        (updatedTeam) => {
+            res.send(updatedTeam);
+        }
+    );
 });
 
 router.delete("/:id", (req, res) => {

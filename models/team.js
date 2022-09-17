@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const teamSchema = new Schema(
+const teamSchema = new mongoose.Schema(
     {
         pokemon: {
             type: Array,
