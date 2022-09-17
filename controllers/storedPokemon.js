@@ -1,7 +1,7 @@
 //Dependencies
 const router = require("express").Router();
 const axios = require("axios");
-const StoredPokemon = require("../models/storedPokemon");
+const storedPokemon = require("../models/storedPokemon");
 //const pokedex = require("pokedex-promise-v2");
 
 //Routes
@@ -12,19 +12,34 @@ router.get("/", async (req, res) => {
     .catch((err) => console.log(err));
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(500).json({ message: String(error) });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { data } = await axios.get("https://pokeapi.co/api/v2/pokemon/ditto");
     console.log(data);
-    const createdPokemon = await new StoredPokemon(data).save();
+    const createdPokemon = await new storedPokemon(data).save();
     console.log(createdPokemon);
     res.json({ message: "pokemon added to storedpokemon db" });
   } catch (error) {
-    res.status(400).json({ message: String(error) });
+    res.status(500).json({ message: String(error) });
   }
 });
 
-router.delete("/", async (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params.id;
+    const targetPokemon = await storedPokemon.findOneAndDelete({ _id: id });
+    res.json(targetPokemon);
+  } catch (error) {
+    res.status(500).json({ message: String(error) });
+  }
+});
 
 //Export
 module.exports = router;
