@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const pokemonTeam = require("./controllers/pokemonTeam_controller");
-//const pokedex = require("pokedex-promise-v2");
+const pokedex = require("pokedex-promise-v2");
 
 const app = express();
 
@@ -15,11 +15,12 @@ app.use("/team", pokemonTeam);
 app.use("/storedPokemon", require("./controllers/storedPokemon"));
 
 mongoose
-    .connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log("DB connected"))
-    .catch((err) => console.error(err));
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("DB connected"))
+  .catch((err) => console.error(err));
+
 
 app.listen(process.env.PORT || 5050);
