@@ -1,32 +1,25 @@
+//DEPENDENCIES
 const express = require("express");
 const mongoose = require("mongoose");
-const pokemonTeam = require("./controllers/pokemonTeam_controller");
 require("dotenv").config();
+const pokemonTeam = require("./controllers/pokemonTeam_controller");
+//const pokedex = require("pokedex-promise-v2");
 
 const app = express();
 
+//MIDDLEWARE
 app.use(express.json());
 
-app.listen(process.env.PORT, () => {
-    console.log("listening on port " + process.env.PORT);
-});
-// MIDDLEWARE
-app.use(express.urlencoded({ extended: true }));
-
-app.get("/", (req, res) => {
-    res.send("hello there");
-});
-
+//ROUTES
 app.use("/team", pokemonTeam);
+app.use("/storedPokemon", require("./controllers/storedPokemon"));
 
 mongoose
     .connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
-    .then(() => {
-        console.log("connected to " + process.env.MONGO_URI);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+    .then(() => console.log("DB connected"))
+    .catch((err) => console.error(err));
+
+app.listen(process.env.PORT || 5050);
