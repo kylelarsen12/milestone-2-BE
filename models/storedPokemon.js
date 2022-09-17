@@ -1,5 +1,6 @@
 //Dependencies
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 //Schema
 const storedPokemonSchema = new mongoose.Schema(
@@ -18,4 +19,5 @@ storedPokemonSchema.methods.logStorage = function () {
 };
 
 //Export
-module.exports = mongoose.model("storedPokemon", storedPokemonSchema);
+const storedPokemon = mongoose.model("storedPokemon", storedPokemonSchema);
+module.exports = storedPokemon;
