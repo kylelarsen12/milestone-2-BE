@@ -22,46 +22,51 @@ router.get("/", async (req, res) => {
 */
 
 router.get("/", async (req, res) => {
-  try {
-    const allPokemon = await storedPokemon.find({});
-    res.json(allPokemon);
-  } catch (error) {
-    res.status(500).json({ message: String(error) });
-  }
+    try {
+        const allPokemon = await storedPokemon.find({});
+        res.json(allPokemon);
+    } catch (error) {
+        res.status(500).json({ message: String(error) });
+    }
 });
 
 router.get("/:id", async (req, res) => {
-  try {
-    const targetPokemon = await storedPokemon.findById(req.params.id);
-    res.json(targetPokemon);
-    console.log(targetPokemon.name);
-  } catch (error) {
-    res.status(500).json({ message: String(error) });
-  }
+    try {
+        const targetPokemon = await storedPokemon.findById(req.params.id);
+        res.json(targetPokemon);
+        console.log(targetPokemon.name);
+    } catch (error) {
+        res.status(500).json({ message: String(error) });
+    }
 });
 
 router.post("/", async (req, res) => {
-  try {
-    const { data } = await axios.get(
-      "https://pokeapi.co/api/v2/pokemon/pikachu"
-    );
-    const createdPokemon = await new storedPokemon(data).save();
-    console.log(createdPokemon);
-    res.json({ message: "pokemon added to storedpokemon db" });
-  } catch (error) {
-    res.status(500).json({ message: String(error) });
-  }
+    try {
+        const { data } = await axios.get(
+            "https://pokeapi.co/api/v2/pokemon/pikachu"
+        );
+        const createdPokemon = await new storedPokemon(data).save();
+        console.log(createdPokemon);
+        res.json({ message: "pokemon added to storedpokemon db" });
+    } catch (error) {
+        res.status(500).json({ message: String(error) });
+    }
 });
 
 router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const user = await storedPokemon.findOneAndDelete({ _id: id });
+    try {
+        const id = req.params.id;
+        const user = await storedPokemon.findOneAndDelete(id);
+        res.send("Success").status(303);
+        //res.redirect("/") NOTE: For some reason the response to the request when this line was put there
+        //was Cannot GET / showing up in postman. Cant figure out for the life of me why, may need a res.render(filename)
+        //to get the server to go somewhere if needed
 
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: String(error) });
-  }
+        // res.json(user); this gave an error regarding the headers as well
+    } catch (error) {
+        res.status(500);
+        // res.send(error); same as line 65 here
+    }
 });
 
 //Export
