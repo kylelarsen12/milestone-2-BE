@@ -1,7 +1,9 @@
 //Dependencies
 const router = require("express").Router();
 const axios = require("axios");
-const storedPokemon = require("../models/storedPokemon.js");
+const cors = require("cors");
+const Pokemon = require("../models/pokemon.js");
+const storedPokemon = require("../models/storedPokemon");
 //const pokedex = require("pokedex-promise-v2");
 
 //Routes
@@ -22,8 +24,22 @@ router.get("/", async (req, res) => {
 */
 
 router.get("/", async (req, res) => {
+  const randomId = Math.floor(Math.random() * 150) + 1;
   try {
-    const { allPokemon } = await storedPokemon.find({});
+    const randomPokemon = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${randomId}`
+    );
+    console.log(randomPokemon.data);
+    await new Pokemon(randomPokemon.data).save();
+    res.send(randomPokemon.data).json();
+  } catch (error) {
+    res.status(500).json({ message: String(error) });
+  }
+});
+
+router.get("/myPokemon", async (req, res) => {
+  try {
+    const allPokemon = await Pokemon.find({ isCaptured: true });
     res.json(allPokemon);
   } catch (error) {
     res.status(500).json({ message: String(error) });
@@ -32,7 +48,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const targetPokemon = await storedPokemon.findById(req.params.id);
+    const targetPokemon = await Pokemon.findById(req.params.id);
     res.json(targetPokemon);
     console.log(targetPokemon.name);
   } catch (error) {
@@ -40,7 +56,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/storedPokemon", async (req, res) => {
   try {
     const { data } = await axios.get(
       "https://pokeapi.co/api/v2/pokemon/pikachu"
