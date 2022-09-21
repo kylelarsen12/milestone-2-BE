@@ -72,8 +72,9 @@ router.post("/storedPokemon", async (req, res) => {
 
 router.delete("/storedPokemon/:id", async (req, res) => {
   try {
-    const { id } = req.params.id;
-    const deletedPokemon = await storedPokemon.findOneAndDelete({ _id: id });
+    const deletedPokemon = await storedPokemon.findOneAndDelete({
+      _id: req.params.id,
+    });
 
     res.json(deletedPokemon);
   } catch (error) {
