@@ -70,6 +70,20 @@ router.post("/storedPokemon", async (req, res) => {
   }
 });
 
+router.put("/storedPokemon/:id", async (req, res) => {
+  try {
+    const selectedPokemon = await storedPokemon.findByIdAndUpdate(
+      req.body._id,
+      {
+        onTeam: true,
+      }
+    );
+    res.json({ message: "pokemon updated to be on team" });
+  } catch (error) {
+    res.status(500).json({ message: String(error) });
+  }
+});
+
 router.delete("/storedPokemon/:id", async (req, res) => {
   try {
     const deletedPokemon = await storedPokemon.findOneAndDelete({
