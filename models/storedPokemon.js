@@ -8,7 +8,10 @@ const storedPokemonSchema = new mongoose.Schema(
     name: { type: String },
     types: { type: Array },
     id: { type: Number },
-    sprites: { type: Array },
+    sprites: { type: Object },
+    isCaptured: { type: Boolean, default: false },
+    onTeam: { type: Boolean, default: false },
+    isStored: { type: Boolean, default: false },
   },
   { toJSON: { virtuals: true } }
 );

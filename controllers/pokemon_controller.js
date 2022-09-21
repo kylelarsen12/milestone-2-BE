@@ -4,6 +4,7 @@ const axios = require("axios");
 const cors = require("cors");
 const Pokemon = require("../models/pokemon.js");
 const storedPokemon = require("../models/storedPokemon");
+let newPokemon;
 //const pokedex = require("pokedex-promise-v2");
 
 //Routes
@@ -31,6 +32,7 @@ router.get("/", async (req, res) => {
     );
     console.log(randomPokemon.data);
     await new Pokemon(randomPokemon.data).save();
+    newPokemon = randomPokemon.data;
     res.send(randomPokemon.data).json();
   } catch (error) {
     res.status(500).json({ message: String(error) });
@@ -58,10 +60,11 @@ router.get("/:id", async (req, res) => {
 
 router.post("/storedPokemon", async (req, res) => {
   try {
-    const { data } = await axios.get(
-      "https://pokeapi.co/api/v2/pokemon/pikachu"
-    );
-    const createdPokemon = await new storedPokemon(data).save();
+    const createdPokemon = await storedPokemon.create(req.body);
+    storedPokemon.findByIdAndUpdate(createdPokemon._id, {
+      isCaptured: true,
+      isStored: true,
+    });
     console.log(createdPokemon);
     res.json({ message: "pokemon added to storedpokemon db" });
   } catch (error) {
