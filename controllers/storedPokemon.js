@@ -22,12 +22,12 @@ router.get("/", async (req, res) => {
 */
 
 router.get("/", async (req, res) => {
-    try {
-        const allPokemon = await storedPokemon.find({});
-        res.json(allPokemon);
-    } catch (error) {
-        res.status(500).json({ message: String(error) });
-    }
+  try {
+    const { allPokemon } = await storedPokemon.find({});
+    res.json(allPokemon);
+  } catch (error) {
+    res.status(500).json({ message: String(error) });
+  }
 });
 
 router.get("/:id", async (req, res) => {

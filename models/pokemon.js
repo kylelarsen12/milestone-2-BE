@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 //Schema
-const storedPokemonSchema = new mongoose.Schema(
+const pokemonSchema = new mongoose.Schema(
   {
     name: { type: String },
     types: { type: Array },
@@ -12,16 +12,15 @@ const storedPokemonSchema = new mongoose.Schema(
     isCaptured: { type: Boolean, default: false },
     onTeam: { type: Boolean, default: false },
     isStored: { type: Boolean, default: false },
-    team: { type: mongoose.Schema.ObjectId, ref: "Team" },
   },
   { toJSON: { virtuals: true } }
 );
 
 //Helper method
-storedPokemonSchema.methods.logStorage = function () {
+pokemonSchema.methods.logStorage = function () {
   return `${this.data.name} was stored into the PC`;
 };
 
 //Export
-const storedPokemon = mongoose.model("storedPokemon", storedPokemonSchema);
-module.exports = storedPokemon;
+const Pokemon = mongoose.model("Pokemon", pokemonSchema);
+module.exports = Pokemon;
