@@ -76,7 +76,8 @@ router.put("/storedPokemon/:id", async (req, res) => {
       req.body._id,
       {
         onTeam: true,
-      }
+      },
+      console.log("updated pokemon to be on team")
     );
     res.json({ message: "pokemon updated to be on team" });
   } catch (error) {
