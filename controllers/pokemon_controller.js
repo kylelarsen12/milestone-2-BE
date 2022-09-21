@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
     );
     await new Pokemon(randomPokemon.data).save();
     newPokemon = randomPokemon.data;
-    res.send(randomPokemon.data).json();
+    res.json(randomPokemon.data);
   } catch (error) {
     res.status(500).json({ message: String(error) });
   }
@@ -97,7 +97,7 @@ router.put("/storedPokemon/:id", async (req, res) => {
 router.put("/storedPokemon/offTeam/:id", async (req, res) => {
   try {
     const selectedPokemon = await storedPokemon.findByIdAndUpdate(
-      req.body._id,
+      req.params.id,
       {
         onTeam: false,
       },
