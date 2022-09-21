@@ -94,6 +94,21 @@ router.put("/storedPokemon/:id", async (req, res) => {
   }
 });
 
+router.put("/storedPokemon/offTeam/:id", async (req, res) => {
+  try {
+    const selectedPokemon = await storedPokemon.findByIdAndUpdate(
+      req.body._id,
+      {
+        onTeam: false,
+      },
+      console.log("updated pokemon to be off team")
+    );
+    res.json({ message: "pokemon updated to be off team" });
+  } catch (error) {
+    res.status(500).json({ message: String(error) });
+  }
+});
+
 router.delete("/storedPokemon/:id", async (req, res) => {
   try {
     const deletedPokemon = await storedPokemon.findOneAndDelete({

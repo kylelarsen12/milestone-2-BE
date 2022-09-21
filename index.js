@@ -9,7 +9,7 @@ const pokemonTeam = require("./controllers/pokemonTeam_controller");
 const app = express();
 
 //MIDDLEWARE
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cors());
 
 //ROUTES
