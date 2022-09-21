@@ -47,6 +47,15 @@ router.get("/myPokemon", async (req, res) => {
   }
 });
 
+router.get("/myTeam", async (req, res) => {
+  try {
+    const teamPokemon = await storedPokemon.find({ onTeam: true });
+    res.json(teamPokemon);
+  } catch (error) {
+    res.status(500).json({ message: String(error) });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const targetPokemon = await Pokemon.findById(req.params.id);
