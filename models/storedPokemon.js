@@ -12,6 +12,7 @@ const storedPokemonSchema = new mongoose.Schema(
     isCaptured: { type: Boolean, default: false },
     onTeam: { type: Boolean, default: false },
     isStored: { type: Boolean, default: false },
+    team: { type: mongoose.Schema.ObjectId, ref: "Team" },
   },
   { toJSON: { virtuals: true } }
 );

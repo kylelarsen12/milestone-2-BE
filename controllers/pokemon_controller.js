@@ -41,6 +41,7 @@ router.get("/", async (req, res) => {
 router.get("/myPokemon", async (req, res) => {
   try {
     const allPokemon = await storedPokemon.find({ isCaptured: true });
+    console.log(allPokemon);
     res.json(allPokemon);
   } catch (error) {
     res.status(500).json({ message: String(error) });
@@ -60,7 +61,6 @@ router.get("/:id", async (req, res) => {
 router.post("/storedPokemon", async (req, res) => {
   try {
     const createdPokemon = await storedPokemon.create(newPokemon);
-    console.log(createdPokemon._id);
     await storedPokemon.findByIdAndUpdate(createdPokemon._id, {
       isCaptured: true,
       isStored: true,
@@ -71,9 +71,9 @@ router.post("/storedPokemon", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/storedPokemon/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params.id;
     const user = await storedPokemon.findOneAndDelete({ _id: id });
 
     res.json(user);
