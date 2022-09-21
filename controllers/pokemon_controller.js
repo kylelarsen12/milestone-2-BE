@@ -30,7 +30,6 @@ router.get("/", async (req, res) => {
     const randomPokemon = await axios.get(
       `https://pokeapi.co/api/v2/pokemon/${randomId}`
     );
-    console.log(randomPokemon.data);
     await new Pokemon(randomPokemon.data).save();
     newPokemon = randomPokemon.data;
     res.send(randomPokemon.data).json();
@@ -41,7 +40,7 @@ router.get("/", async (req, res) => {
 
 router.get("/myPokemon", async (req, res) => {
   try {
-    const allPokemon = await Pokemon.find({ isCaptured: true });
+    const allPokemon = await storedPokemon.find({ isCaptured: true });
     res.json(allPokemon);
   } catch (error) {
     res.status(500).json({ message: String(error) });
@@ -60,12 +59,12 @@ router.get("/:id", async (req, res) => {
 
 router.post("/storedPokemon", async (req, res) => {
   try {
-    const createdPokemon = await storedPokemon.create(req.body);
-    storedPokemon.findByIdAndUpdate(createdPokemon._id, {
+    const createdPokemon = await storedPokemon.create(newPokemon);
+    console.log(createdPokemon._id);
+    await storedPokemon.findByIdAndUpdate(createdPokemon._id, {
       isCaptured: true,
       isStored: true,
     });
-    console.log(createdPokemon);
     res.json({ message: "pokemon added to storedpokemon db" });
   } catch (error) {
     res.status(500).json({ message: String(error) });
