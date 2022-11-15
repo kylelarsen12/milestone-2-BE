@@ -1,17 +1,18 @@
+import { ok } from "assert";
+
 const express = require("express");
 const router = express.Router();
-const Team = require("../models/team");
+const Team = require(`../models/team`);
 const randomId = Math.floor(Math.random() * 150) + 1;
 const axios = require("axios");
 const mongoose = require("mongoose");
 
-router.get("/", async (req, res) => {
+router.get("/", async (_req, res): Promise<void> => {
     try {
         axios
             .get(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
             .then((foundPokemon) => {
-                res.status(200);
-                res.send(foundPokemon.data.name);
+                res.status(200).send(foundPokemon.data.name);
             });
     } catch (error) {
         res.status(500).json(error);
